@@ -9,6 +9,7 @@
 #include<stdio.h>
 #include<unistd.h>
 
+//Takes command line arguments and the directory to work from
 /*
  * Takes command line arguments and the directory to pull from
  * 
@@ -24,7 +25,14 @@ int change(int count, char* arguements[]){
     int index;
     args[0] = cmd;
     for(index = 1; index < count; index++){
-        args[index] = arguements[index];
+        printf("In change loop\n");
+        if(arguements[index] == "--random"){
+            printf("Found custom flag\n");
+            args[index] = "--randomize";
+        }
+        else{
+            args[index] = arguements[index];
+        }
     }
     args[count] = NULL;
 
