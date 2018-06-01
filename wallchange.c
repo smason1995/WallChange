@@ -8,15 +8,15 @@
 #include<stdio.h>
 #include<unistd.h>
 
-int change(char directory[]){
-    char *cmd = "feh";
-    char *args[5];
-    args[0] = "feh";
-    args[1] = "--bg-scale";
-    args[2] = "--randomize";
-    //args[3] = "/home/smason/.wallpapers/";
-    args[3] = directory;
-    args[4] = NULL;
+int change(int count, char* arguements[]){
+    char* cmd = "feh";
+    char* args[count];
+    int i;
+    args[0] = cmd;
+    for(i = 1; i < count; i++){
+        args[i] = arguements[i];
+    }
+    args[count] = NULL;
 
     if(execvp(cmd, args) == -1){
         return -1;
@@ -27,10 +27,15 @@ int change(char directory[]){
 }
 
 int main(int argc, char* argv[]){
-    printf("%s\n", argv[argc-1]);
-    if(change(argv[argc-1]) == -1){
+    int i;
+    for(i = 1; i < argc; i++){
+        printf("%s\n", argv[i]);
+    }
+
+    if(change(argc, argv) == -1){
         printf("An error has occured\n");
         return -1;
     }
+
     return(0);
 }
