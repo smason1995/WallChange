@@ -1,15 +1,18 @@
 /*
  * Main function
+ *
+ * author: Sydney Mason
+ * version 06/01/2018
  */
 
 #include<stdio.h>
 #include "wallchange.h"
 
 int main(int argc, char* argv[]){
-    int i;
-    for(i = 1; i < argc; i++){
-        printf("%s\n", argv[i]);
-    }
+    //int i;
+    //for(i = 1; i < argc; i++){
+        //printf("%s\n", argv[i]);
+    //}
 
     if(change(argc, argv) == -1){
         printf("An error has occured\n");

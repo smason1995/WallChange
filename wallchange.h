@@ -1,3 +1,10 @@
+/*
+ * Header file for wallchange library
+ *
+ * author: Sydney Mason
+ * version: 06/01/2018
+ */
+
 #ifndef WALLCHANGE_H
 #define WALLCHANGE_H
 
