@@ -6,8 +6,9 @@
  */
 
 //Imported libraries
-#include<stdio.h>
-#include<unistd.h>
+//#include<stdio.h>
+//#include<unistd.h>
+#include "wallchange.h"
 
 //Takes command line arguments and the directory to work from
 /*
@@ -20,14 +21,17 @@
  * index - index the positions of args and arguements
  */
 int change(int count, char* arguements[]){
+    printf("Entered Change!\n");
     char* cmd = "feh";
     char* args[count];
     int index;
     args[0] = cmd;
     for(index = 1; index < count; index++){
-        printf("In change loop\n");
-        if(arguements[index] == "--random"){
+        printf("Entered change for loop\n");
+        printf("%s\n", arguements[index]);
+        if(strcmp(arguements[index], "-r") == 0){
             printf("Found custom flag\n");
+            printf("%s\n", arguements[index]);
             args[index] = "--randomize";
         }
         else{
@@ -44,19 +48,3 @@ int change(int count, char* arguements[]){
     }
 }
 
-/*
- * Main function
- */
-int main(int argc, char* argv[]){
-    int i;
-    for(i = 1; i < argc; i++){
-        printf("%s\n", argv[i]);
-    }
-
-    if(change(argc, argv) == -1){
-        printf("An error has occured\n");
-        return -1;
-    }
-
-    return(0);
-}
