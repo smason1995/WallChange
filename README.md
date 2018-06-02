@@ -9,6 +9,9 @@ TODO:
 
 To setup do:
 1) cd path/to/source/code
+2) Install feh from distro repositories
+    - Arch: pacman -S feh
+    - Ubuntu: apt-get install feh
 2) make
 
 To use:
