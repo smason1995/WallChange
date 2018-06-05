@@ -14,8 +14,14 @@ int main(int argc, char* argv[]){
         //printf("%s\n", argv[i]);
     //}
 
-    if(change(argc, argv) == -1){
+    int result = change(argc, argv);
+
+    if(result == 1){
         printf("An error has occured\n");
+        return 1;
+    }
+    else if(result == -1){
+        printf("No image files found in %s\n", argv[argc-1]);
         return -1;
     }
 
