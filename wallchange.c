@@ -7,6 +7,15 @@
 
 #include "wallchange.h"
 
+#define OPT_NUM 5
+#define IMG_EXT 3
+
+int num_of_images;
+
+char* flags[] = {"-r", "--style=", "-c", "--time=", "--kill"};
+char* options[OPT_NUM] = {"scale", "tile", "center", "fill", "max"};
+char* image_extensions[IMG_EXT] = {".jpg", ".jpeg", ".png"};
+
 /*
  * Takes command line arguments and the directory to pull from
  * 
@@ -18,25 +27,12 @@
  * args[] = char array that sets up command line call to feh
  * index - index the positions of args and arguements
  */
-
-#define OPT_NUM 5
-#define IMG_EXT 3
-
-int num_of_images;
-
-char* flags[] = {"-r", "--style=", "-c", "--time=", "--kill"};
-char* options[OPT_NUM] = {"scale", "tile", "center", "fill", "max"};
-char* image_extensions[IMG_EXT] = {".jpg", ".jpeg", ".png"};
-
 int change(int count, char* arguements[]){
-    //printf("Entered Change!\n");
     char* cmd = "feh";
     char* args[count];
     int index;
     args[0] = cmd;
     for(index = 1; index < count; index++){
-        //printf("Entered change for loop\n");
-        //printf("%s\n", arguements[index]);
         if(strcmp(arguements[index], flags[0]) == 0){
             printf("Found custom flag\n");
             printf("%s\n", arguements[index]);
@@ -64,13 +60,20 @@ int change(int count, char* arguements[]){
             printf("This flag will kill the wallchange thread\n");
         }
         else{
-            if(is_directory(arguements[index]) == 0){
+            int check = is_directory(arguements[index]);
+            if(check == 0){
                 if(image_count(arguements[index]) > 0){
                     args[index] = arguements[index];
                 }
                 else{
                     return -1;
                 }
+            }
+            else if(check == 1){
+                args[index] = arguements[index];
+            }
+            else if(check == -1){
+                return -1;
             }
         }
     }
@@ -88,11 +91,27 @@ int change(int count, char* arguements[]){
  * Checks if path is a directory
  *
  * returns 0 if path is directory and exists
- * returns 1 if path is image file
+ * returns 1 if path is a regular file
  * returns -1 if path doesn't exist or is invalid input
  */
 int is_directory(char path[]){
-    return 0;
+    struct stat dir_check;
+    stat(path, &dir_check);
+    if(S_ISDIR(dir_check.st_mode) == 1){
+        return 0;
+    }
+    else if(S_ISREG(dir_check.st_mode) == 1){
+        int i;
+        for(i = 0; i < IMG_EXT; i++){
+            if(strstr(path, image_extensions[i])){
+                return 1;
+            }
+        }
+        return -1;
+    }
+    else{
+        return -1;
+    }
 }
 
 /*
@@ -117,10 +136,11 @@ int image_count(char path[]){
     dp = opendir(path);
     while((entry = readdir(dp)) != NULL){
         if(entry->d_type == DT_REG){
-            if(strstr(entry->d_name, ".jpg") ||
-                    strstr(entry->d_name, ".png") ||
-                    strstr(entry->d_name, ".jpeg")){
-                image_count++;
+            int i;
+            for(i = 0; i < IMG_EXT; i++){
+                if(strstr(entry->d_name, image_extensions[i])){
+                    image_count++;
+                }
             }
         }
     }
